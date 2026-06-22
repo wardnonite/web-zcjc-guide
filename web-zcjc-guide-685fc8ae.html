@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>足彩竞猜 · 数据查询与延伸阅读</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background-color: #f8f6f3;
+            color: #1f1e1c;
+            line-height: 1.7;
+        }
+
+        a {
+            color: #1f5d3a;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: #3d8b5e;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ----- Hero 区：深色背景，有层次感 ----- */
+        .hero {
+            background: #1e2b2c;
+            background-image: radial-gradient(circle at 20% 30%, #2d4244 0%, #1a2627 90%);
+            color: #e9e3da;
+            padding: 80px 0 72px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, #f8f6f3);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            margin-bottom: 12px;
+        }
+
+        .hero .sub {
+            font-size: 1.1rem;
+            color: #b7afa3;
+            max-width: 640px;
+            margin: 0 auto 32px;
+            line-height: 1.6;
+        }
+
+        .hero .tagline {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(2px);
+            color: #cdc6b8;
+        }
+
+        /* ----- 浅色正文区 ----- */
+        section {
+            padding: 56px 0;
+        }
+
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 450;
+            margin-bottom: 20px;
+            color: #1f2b2a;
+            letter-spacing: -0.01em;
+        }
+
+        .section-sub {
+            font-size: 1rem;
+            color: #4a4843;
+            margin-bottom: 32px;
+        }
+
+        /* 卡片网格 */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 28px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 28px 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03), 0 8px 24px rgba(0, 0, 0, 0.04);
+            transition: box-shadow 0.2s;
+            border: 1px solid #eeebe7;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 12px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #1f2b2a;
+        }
+
+        .card p {
+            color: #3b3935;
+            font-size: 0.95rem;
+        }
+
+        .card .emoji-icon {
+            font-size: 1.5rem;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        /* ----- 说明区：更宽松排版 ----- */
+        .explain-block {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 36px 32px;
+            margin: 12px 0 20px;
+            border: 1px solid #e5e0da;
+        }
+
+        .explain-block p {
+            margin-bottom: 16px;
+            font-size: 1rem;
+        }
+
+        .explain-block p:last-child {
+            margin-bottom: 0;
+        }
+
+        .highlight-link {
+            background: #f1f7f2;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* FAQ 摘要 */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 40px;
+        }
+
+        .faq-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #e1dcd5;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-q {
+            font-weight: 500;
+            color: #1f2b2a;
+            margin-bottom: 4px;
+        }
+
+        .faq-a {
+            color: #4f4c46;
+            font-size: 0.92rem;
+        }
+
+        /* 底部链接区 */
+        .site-footer {
+            background: #1e2b2c;
+            color: #b7afa3;
+            padding: 40px 0 48px;
+            margin-top: 32px;
+        }
+
+        .site-footer a {
+            color: #b7d3bd;
+            text-decoration: underline;
+        }
+
+        .site-footer a:hover {
+            color: #e2ecd9;
+        }
+
+        .footer-inner {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .footer-links a {
+            margin: 0 12px;
+        }
+
+        .footer-note {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        /* 响应式细节 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .hero .sub {
+                font-size: 1rem;
+            }
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            .explain-block {
+                padding: 28px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 56px 0 48px;
+            }
+            .hero h1 {
+                font-size: 1.7rem;
+            }
+            section {
+                padding: 40px 0;
+            }
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="container">
+            <h1>竞猜之外，更关心数据</h1>
+            <p class="sub">
+                查询、对照、延伸——<a href="https://web-zcjc.com" style="color:#d6e6d3;text-decoration:underline;">足彩竞猜</a>为你提供安静的信息角落。
+                不喧哗，只把数字和规则摊开在你面前。
+            </p>
+            <span class="tagline">日常参考 · 赛事对照 · 术语延伸</span>
+        </div>
+    </header>
+
+    <!-- 优势区 -->
+    <section>
+        <div class="container">
+            <h2 class="section-title">为什么需要一处查询站</h2>
+            <p class="section-sub">竞猜的前提是理解，理解的前提是参照。</p>
+            <div class="cards">
+                <div class="card">
+                    <span class="emoji-icon">📋</span>
+                    <h3>结构化的对照表</h3>
+                    <p>联赛数据、赔付区间、历史频次——用表格而非叙述，帮你快速定位。适合在投注前做一次冷静核对。</p>
+                </div>
+                <div class="card">
+                    <span class="emoji-icon">📎</span>
+                    <h3>延伸阅读入口</h3>
+                    <p>每个概念、每条规则背后都可能有一篇文章。我们不创造观点，只是把来源和解释整理到顺手的位置。</p>
+                </div>
+                <div class="card">
+                    <span class="emoji-icon">🔄</span>
+                    <h3>日常查询习惯</h3>
+                    <p>把查询当作一种准备动作，而非临时抱佛脚。页面设计鼓励浏览，也支持搜索——自然融入你的信息流程。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 说明区：从日常叙述角度 -->
+    <section style="padding-top:0;">
+        <div class="container">
+            <h2 class="section-title" style="margin-top:8px;">关于参考与理解</h2>
+            <div class="explain-block">
+                <p>
+                    很多人在接触竞猜时，首先面对的是术语和浮动的数字。赔率、盘口、返还率……它们不是孤立的符号，而是由规则、概率和市场共同编织的网。<strong>对照</strong>是拆开这张网的第一步。
+                </p>
+                <p>
+                    我们做这个页面，初衷很简单：当你在聊天中看到一组数字，或需要快速确认某个联赛的让球习惯时，有一个地方可以<strong>直接看到并排的数据</strong>，而不需要在信息流里翻找。这就是<a href="https://web-zcjc.com" class="highlight-link">足彩竞猜</a>正在做的事——帮你在日常里建立一点参照感。
+                </p>
+                <p>
+                    延伸阅读不是负担。碰到不熟悉的规则，旁边就有解释链接；想了解某种赔付模式的历史表现，几页之外就有整理。你不需要一次读完，需要的时候，它就在那里。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ 摘要 -->
+    <section style="padding-top:8px;">
+        <div class="container">
+            <h2 class="section-title">常见疑问摘要</h2>
+            <p class="section-sub">一些用户在查询时常问的问题，简短回答放在这里。</p>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-q">这里的赔率数据是实时更新吗？</div>
+                    <div class="faq-a">以参考性静态数据为主，部分内容跟随主流平台节奏更新，具体每页会标注时间戳。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">有没有手机版或专门应用？</div>
+                    <div class="faq-a">当前页面为响应式设计，浏览器直接使用即可。没有独立的 App，未来会考虑更轻量的工具形态。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">页面里的“延伸阅读”是外部链接吗？</div>
+                    <div class="faq-a">部分指向站内整理的长文，部分引用可信外部来源。每个链接都会标注类型，你可以自行判断是否打开。</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">为什么强调“对照”而不是分析？</div>
+                    <div class="faq-a">因为大多数决策失误来自信息盲区，而非分析能力。对照是把已知和未知放在同一视野里，减少遗漏。</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部 + 链接 -->
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>
+                <span style="font-size:0.95rem;">数据整理 · <a href="https://web-zcjc.com">足彩竞猜</a></span>
+            </div>
+            <div class="footer-links">
+                <a href="https://web-zcjc.com">足彩竞猜</a>
+                <a href="https://web-zcjc.com">足彩竞猜</a>
+            </div>
+            <div class="footer-note">
+                仅作为日常查询与延伸阅读，不构成任何投注建议。
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
